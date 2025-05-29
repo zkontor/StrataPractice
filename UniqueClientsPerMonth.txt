@@ -1,0 +1,12 @@
+Python Pandas Question
+ID: 2024
+Givens:
+Write a query that returns the number of unique users per client per month.
+DataFrame: fact_events
+-----------------
+import pandas as pd
+fact_events['month'] = fact_events['time_id'].dt.month
+
+fact_eventsGroup = fact_events.groupby(['client_id', 'month'])['user_id'].nunique().reset_index()
+
+fact_eventsGroup
