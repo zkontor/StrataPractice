@@ -1,0 +1,58 @@
+ID: 9632
+You are given a table named airbnb_host_searches that contains data for rental property searches made by users. Determine the minimum, average, and maximum rental prices for each popularity-rating bucket. A popularity-rating bucket should be assigned to every record based on its number_of_reviews (see rules below).
+
+
+The host’s popularity rating is defined as below:
+•   0 reviews: "New"
+•   1 to 5 reviews: "Rising"
+•   6 to 15 reviews: "Trending Up"
+•   16 to 40 reviews: "Popular"
+•   More than 40 reviews: "Hot"
+
+
+Tip: The id column in the table refers to the search ID.
+
+
+Problem: Output host popularity rating and their minimum, average and maximum rental prices. Order the solution by the minimum price.
+
+import numpy as np
+import pandas as pd
+
+
+pd.options.display.float_format = "{:,.2f}".format
+
+df = airbnb_host_searches.copy()
+
+def popularity(x):
+    if x == 0:
+        return "New"
+    elif 1 <= x <= 5:
+        return "Rising"
+    elif 6 <= x <= 15:
+        return "Trending Up"
+    elif 16 <= x <= 40:
+        return "Popular"
+    else:
+        return "HOT"
+
+df["host_popularity"] = df["number_of_reviews"].apply(popularity)
+
+result = (
+    df.groupby("host_popularity")
+    .agg(
+        min_price=("price", "min"),
+        avg_price=("price", np.mean),
+        max_price=("price", "max"),
+    )
+    .reset_index()
+    .sort_values(by="min_price")
+)
+
+
+----Output----
+host_popularity	min_price	avg_price	max_price
+Popular	270.81	472.81	667.83
+New	313.55	516.67	741.76
+HOT	340.12	467.47	633.51
+Rising	355.53	506.65	717.01
+Trending Up	361.09	476.28	685.65

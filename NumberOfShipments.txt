@@ -1,0 +1,19 @@
+ID: 2056
+Problem: Write a query that will calculate the number of shipments per month. The unique key for one shipment is a combination of shipment_id and sub_id. Output the year_month in format YYYY-MM and the number of shipments in that month.
+Givens: shipment_id:int64 | sub_id:int64 | weight:int64 | shipment_date:datetime64[ns]
+
+Solution:
+
+import pandas as pd
+
+df = amazon_shipment
+df['yearMonth'] = df['shipment_date'].dt.strftime('%Y-%m')
+
+groupedDF = df.groupby('yearMonth')['shipment_id'].count().reset_index()
+
+groupedDF
+
+-----Output-----
+yearMonth	shipment_id
+2021-08	        3
+2021-09	        6
