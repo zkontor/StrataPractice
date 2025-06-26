@@ -1,0 +1,20 @@
+Question States: Find the customers with the highest daily total order cost between 2019-02-01 and 2019-05-01. 
+If a customer had more than one order on a certain day, sum the order costs on a daily basis. Output each customer's first name, total cost of their items, and the date.
+
+----------------------------------------
+|Solved  in python using pandas library|
+----------------------------------------
+
+import pandas as pd
+
+
+df = customers.merge(orders, how='right', left_on='id', right_on='cust_id').sort_values (by=['first_name' , 'order_date'])
+
+df = df.groupby(['first_name','order_date'], as_index = False)['total_order_cost'].sum()
+
+df['order_date'] = df['order_date'].dt.strftime('%Y-%m-%d')
+
+df[df['order_date'].between('2019-02-01','2019-05-01')]
+df2 = df.nlargest(1, 'total_order_cost', keep='all')
+
+df2
